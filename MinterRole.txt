@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+abstract contract MinterRole {
+    mapping(address => bool) private _minters;
+
+    constructor() {
+        _minters[msg.sender] = true;
+    }
+
+    modifier onlyMinter() {
+        require(_minters[msg.sender], "MinterRole: caller does not have the Minter role");
+        _;
+    }
+
+    function addMinter(address account) public onlyMinter {
+        _minters[account] = true;
+    }
+
+    function renounceMinter() public {
+        _minters[msg.sender] = false;
+    }
+}
